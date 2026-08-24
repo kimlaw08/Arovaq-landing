@@ -8,158 +8,217 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen pb-24 select-none">
+<body class="bg-slate-950 text-slate-100 min-h-screen pb-28 select-none font-sans">
 
-  <!-- 7. Creator Spotlight / Announcement Banner -->
-  <div class="bg-gradient-to-r from-amber-600 to-amber-500 text-slate-950 text-[11px] font-bold px-4 py-1.5 text-center truncate shadow-md">
-    🔥 Welcome to Arovaq V2 — Instant Web3 Creator & Promoter Hub
+  <!-- LIVE NOTIFICATION TOAST CONTAINER -->
+  <div id="toast-container" class="fixed top-3 left-3 right-3 z-50 pointer-events-none flex flex-col items-center space-y-2"></div>
+
+  <!-- SCREAMING INSTANT PAYOUT HERO BANNER -->
+  <div class="bg-gradient-to-r from-emerald-600 via-emerald-500 to-amber-500 text-slate-950 text-[11px] font-extrabold px-3 py-2 text-center shadow-lg flex items-center justify-center space-x-1.5 animate-pulse">
+    <span>⚡ 100% INSTANT PAYOUTS:</span>
+    <span class="font-medium">Earnings hit your Phantom, Solflare, or Binance UID instantly!</span>
   </div>
 
-  <!-- Header -->
-  <header class="flex justify-between items-center px-4 pt-4 pb-2 border-b border-slate-900">
-    <div>
-      <h1 class="text-xl font-extrabold text-amber-400 tracking-tight">Arovaq Store</h1>
-      <p class="text-[10px] text-slate-400">Decentralized Digital Shelf</p>
+  <!-- BRAND HEADER -->
+  <header class="flex justify-between items-center px-4 pt-4 pb-3 border-b border-slate-900 bg-slate-950/80 backdrop-blur-md sticky top-0 z-30">
+    <div class="flex items-center space-x-2.5">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-black text-lg shadow-lg shadow-amber-500/20">
+        A
+      </div>
+      <div>
+        <h1 class="text-base font-extrabold text-amber-400 tracking-tight leading-tight">Arovaq Store</h1>
+        <p class="text-[10px] text-emerald-400 font-semibold tracking-wider uppercase">Instant Web3 Rails</p>
+      </div>
     </div>
-    <!-- 10. Gamified Ambassador Badge -->
-    <div class="flex items-center space-x-2 bg-slate-900 border border-slate-800 px-3 py-1 rounded-full">
-      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-      <span id="username" class="text-xs font-medium text-slate-200">Loading...</span>
+    <!-- Ambassador Status Pill -->
+    <div class="flex items-center space-x-1.5 bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-full shadow-inner">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+      <span id="username" class="text-xs font-bold text-slate-200">Loading...</span>
     </div>
   </header>
 
-  <!-- Main Views Container -->
+  <!-- MAIN APP VIEWS -->
   <main class="p-4 space-y-6">
 
     <!-- VIEW 1: STOREFRONT -->
     <div id="view-store" class="space-y-4">
       
-      <!-- 9. Built-in Instant Search Bar -->
+      <!-- Instant Search Bar -->
       <div class="relative">
-        <input type="text" id="search-input" oninput="filterProducts()" placeholder="🔍 Search eBooks, courses, templates..." 
-          class="w-full bg-slate-900 border border-slate-800 text-slate-100 text-xs rounded-xl px-4 py-2.5 focus:outline-none focus:border-amber-500 transition">
+        <input type="text" id="search-input" oninput="filterProducts()" placeholder="🔍 Search eBooks, masterclasses, templates..." 
+          class="w-full bg-slate-900/80 border border-slate-800 text-slate-100 text-xs rounded-xl px-4 py-3 focus:outline-none focus:border-amber-500 transition shadow-inner">
       </div>
 
-      <!-- 2. Horizontal Sticky Category Pills -->
+      <!-- Sticky Category Pills -->
       <div class="flex space-x-2 overflow-x-auto pb-1 scrollbar-none text-xs">
-        <button onclick="setCategory('all')" class="cat-btn bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-lg whitespace-nowrap transition">⚡ All</button>
-        <button onclick="setCategory('web3')" class="cat-btn bg-slate-900 border border-slate-800 text-slate-300 font-medium px-3 py-1.5 rounded-lg whitespace-nowrap transition">🌐 Web3</button>
-        <button onclick="setCategory('ebook')" class="cat-btn bg-slate-900 border border-slate-800 text-slate-300 font-medium px-3 py-1.5 rounded-lg whitespace-nowrap transition">📚 eBooks</button>
-        <button onclick="setCategory('masterclass')" class="cat-btn bg-slate-900 border border-slate-800 text-slate-300 font-medium px-3 py-1.5 rounded-lg whitespace-nowrap transition">🎓 Masterclasses</button>
-        <button onclick="setCategory('template')" class="cat-btn bg-slate-900 border border-slate-800 text-slate-300 font-medium px-3 py-1.5 rounded-lg whitespace-nowrap transition">🛠️ Templates</button>
+        <button onclick="setCategory('all')" class="cat-btn bg-amber-500 text-slate-950 font-bold px-3.5 py-1.5 rounded-xl whitespace-nowrap transition shadow-md shadow-amber-500/20">🔥 All Assets</button>
+        <button onclick="setCategory('web3')" class="cat-btn bg-slate-900 border border-slate-800 text-slate-300 font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">🌐 Web3 & DeFi</button>
+        <button onclick="setCategory('ebook')" class="cat-btn bg-slate-900 border border-slate-800 text-slate-300 font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">📚 eBooks</button>
+        <button onclick="setCategory('masterclass')" class="cat-btn bg-slate-900 border border-slate-800 text-slate-300 font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">🎓 Masterclasses</button>
+        <button onclick="setCategory('template')" class="cat-btn bg-slate-900 border border-slate-800 text-slate-300 font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">🛠️ Templates</button>
       </div>
 
-      <!-- 1. Dual-Column Product Grid -->
+      <!-- Dual-Column Product Grid -->
       <section>
-        <div class="flex justify-between items-center mb-2">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Featured Shelves</h2>
-          <span id="product-count" class="text-[10px] text-slate-500">0 items</span>
+        <div class="flex justify-between items-center mb-2.5">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Featured Curated Shelves</h2>
+          <span id="product-count" class="text-[10px] text-amber-400/80 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md">0 items</span>
         </div>
         <div id="product-grid" class="grid grid-cols-2 gap-3">
-          <!-- Skeleton Loading State (8) -->
-          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl animate-pulse h-40"></div>
-          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl animate-pulse h-40"></div>
+          <!-- Skeleton Loading State -->
+          <div class="bg-slate-900/50 border border-slate-800 p-3 rounded-2xl animate-pulse h-48"></div>
+          <div class="bg-slate-900/50 border border-slate-800 p-3 rounded-2xl animate-pulse h-48"></div>
         </div>
       </section>
 
-      <!-- 11. Q&A / Knowledge Base Section -->
+      <!-- Knowledge Base & Q&A Section -->
       <section class="border-t border-slate-900 pt-6 mt-8">
-        <h2 class="text-sm font-bold text-amber-400 mb-3">💡 Frequently Asked Questions</h2>
+        <h2 class="text-sm font-bold text-amber-400 mb-3 flex items-center space-x-1.5">
+          <span>💡</span><span>Creator & Buyer Guide</span>
+        </h2>
         <div class="space-y-2.5">
-          <div class="bg-slate-900/80 border border-slate-800/80 p-3 rounded-xl">
+          <div class="bg-slate-900/60 backdrop-blur-sm border border-slate-800/80 p-3.5 rounded-xl">
             <h3 class="font-semibold text-xs text-white mb-1">🔗 How do I connect my wallet?</h3>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Use a self-custody wallet (Phantom/Solflare) or a CEX destination (Binance UID / email). Send <code class="text-amber-400 bg-slate-950 px-1 py-0.5 rounded">/wallet</code> in the bot.</p>
+            <p class="text-[11px] text-slate-400 leading-relaxed">Use a self-custody wallet (Phantom/Solflare) or a CEX destination (Binance UID / email). Send <code class="text-amber-400 bg-slate-950 px-1.5 py-0.5 rounded">/wallet</code> in the bot.</p>
           </div>
-          <div class="bg-slate-900/80 border border-slate-800/80 p-3 rounded-xl">
-            <h3 class="font-semibold text-xs text-white mb-1">💰 How do I receive payments?</h3>
-            <p class="text-[11px] text-slate-400 leading-relaxed">Track commissions live via <code class="text-amber-400 bg-slate-950 px-1 py-0.5 rounded">/earnings</code>. Payouts route instantly to your saved destination.</p>
+          <div class="bg-slate-900/60 backdrop-blur-sm border border-slate-800/80 p-3.5 rounded-xl">
+            <h3 class="font-semibold text-xs text-white mb-1">💰 How do instant payouts work?</h3>
+            <p class="text-[11px] text-slate-400 leading-relaxed">No delays or processing queues. Track commissions live via <code class="text-amber-400 bg-slate-950 px-1.5 py-0.5 rounded">/earnings</code> and receive funds instantly.</p>
           </div>
-          <div class="bg-slate-900/80 border border-slate-800/80 p-3 rounded-xl">
+          <div class="bg-slate-900/60 backdrop-blur-sm border border-slate-800/80 p-3.5 rounded-xl">
             <h3 class="font-semibold text-xs text-white mb-1">👑 Why & how to join VIP?</h3>
-            <p class="text-[11px] text-slate-400 leading-relaxed">VIP unlocks masterclasses and higher commission multipliers. Check our community channel updates to upgrade!</p>
+            <p class="text-[11px] text-slate-400 leading-relaxed">VIP unlocks advanced masterclasses, higher commission multipliers, and exclusive community perks.</p>
           </div>
         </div>
       </section>
     </div>
 
-    <!-- VIEW 2: MY LIBRARY (Purchased Assets) -->
-    <div id="view-library" class="hidden space-y-4">
+    <!-- VIEW 2: LIBRARY -->
+    <div id="view-library" class="hidden space-y-4 animate-in fade-in duration-200">
       <h2 class="text-sm font-bold text-amber-400">📦 Your Digital Library</h2>
-      <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl text-center space-y-2">
-        <p class="text-xs text-slate-400">No purchases or downloads recorded yet.</p>
-        <p class="text-[10px] text-slate-500">Items you buy will appear here instantly for download.</p>
+      <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl text-center space-y-3">
+        <span class="text-3xl">📂</span>
+        <p class="text-xs text-slate-300 font-medium">No purchases or downloads recorded yet.</p>
+        <p class="text-[11px] text-slate-500">Masterclasses and eBooks you buy or unlock will appear here instantly with one-click access.</p>
       </div>
     </div>
 
-    <!-- VIEW 3: DASHBOARD -->
-    <div id="view-dashboard" class="hidden space-y-4">
+    <!-- VIEW 3: ROADMAP & COMING SOON VAULT -->
+    <div id="view-roadmap" class="hidden space-y-4 animate-in fade-in duration-200">
+      <div>
+        <h2 class="text-sm font-bold text-amber-400">🚀 Innovation Roadmap & Coming Soon</h2>
+        <p class="text-[11px] text-slate-400 mt-0.5">The next-generation features currently under development for Arovaq.</p>
+      </div>
+      <div class="space-y-3">
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-1.5">
+          <div class="flex justify-between items-center">
+            <h3 class="font-bold text-xs text-white">1. Solana Smart Contract Escrow</h3>
+            <span class="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-bold">In Testing</span>
+          </div>
+          <p class="text-[11px] text-slate-400">Fully decentralized, automated on-chain commission splits and trustless escrow execution on Solana.</p>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-1.5">
+          <div class="flex justify-between items-center">
+            <h3 class="font-bold text-xs text-white">2. Direct Mobile Money On/Off-Ramp</h3>
+            <span class="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-bold">Coming Soon</span>
+          </div>
+          <p class="text-[11px] text-slate-400">One-tap fiat gateway integration supporting peer-to-peer mobile payments seamlessly.</p>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-1.5">
+          <div class="flex justify-between items-center">
+            <h3 class="font-bold text-xs text-white">3. In-App Digital Reader & Audio Player</h3>
+            <span class="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full font-bold">Planned</span>
+          </div>
+          <p class="text-[11px] text-slate-400">Read eBooks and listen to masterclass audio streams directly inside the Telegram Mini App.</p>
+        </div>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-1.5">
+          <div class="flex justify-between items-center">
+            <h3 class="font-bold text-xs text-white">4. Creator Studio Suite & Analytics</h3>
+            <span class="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded-full font-bold">Planned</span>
+          </div>
+          <p class="text-[11px] text-slate-400">Advanced real-time sales metrics, traffic heatmaps, and promoter leaderboards for creators.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: DASHBOARD -->
+    <div id="view-dashboard" class="hidden space-y-4 animate-in fade-in duration-200">
       <h2 class="text-sm font-bold text-amber-400">📊 Ambassador Dashboard</h2>
       <div class="grid grid-cols-2 gap-3">
-        <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl">
-          <p class="text-[10px] text-slate-400">Total Referrals</p>
-          <p id="dash-referrals" class="text-lg font-bold text-white mt-1">0</p>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl shadow-inner">
+          <p class="text-[10px] text-slate-400 uppercase tracking-wider">Total Referrals</p>
+          <p id="dash-referrals" class="text-xl font-extrabold text-white mt-1">0</p>
         </div>
-        <div class="bg-slate-900 border border-slate-800 p-3.5 rounded-xl">
-          <p class="text-[10px] text-slate-400">Estimated Earnings</p>
-          <p id="dash-earnings" class="text-lg font-bold text-amber-400 mt-1">$0.00</p>
+        <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl shadow-inner">
+          <p class="text-[10px] text-slate-400 uppercase tracking-wider">Instant Earnings</p>
+          <p id="dash-earnings" class="text-xl font-extrabold text-emerald-400 mt-1">$0.00</p>
         </div>
       </div>
-      <button onclick="copyRefLink()" class="w-full bg-slate-900 hover:bg-slate-800 border border-amber-500/30 text-amber-400 text-xs font-bold py-2.5 rounded-xl transition">
+      <button onclick="triggerHaptic(); copyRefLink();" class="w-full bg-slate-900 hover:bg-slate-800 border border-amber-500/30 text-amber-400 text-xs font-bold py-3 rounded-xl transition shadow-lg shadow-amber-500/5">
         🔗 Copy Personal Referral Link
       </button>
     </div>
 
   </main>
 
-  <!-- 3. Integrated Bottom Navigation Bar -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-slate-950/90 backdrop-blur-md border-t border-slate-900 py-2.5 px-6 flex justify-around items-center z-40">
-    <button onclick="switchTab('store')" id="nav-store" class="nav-btn flex flex-col items-center text-amber-400">
-      <span class="text-lg">🛒</span>
-      <span class="text-[10px] font-bold mt-0.5">Store</span>
+  <!-- BOTTOM NAVIGATION BAR -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-slate-950/95 backdrop-blur-md border-t border-slate-900 py-2.5 px-4 flex justify-around items-center z-40">
+    <button onclick="triggerHaptic(); switchTab('store')" id="nav-store" class="nav-btn flex flex-col items-center text-amber-400 transition">
+      <span class="text-base">🛒</span>
+      <span class="text-[9px] font-bold mt-0.5">Store</span>
     </button>
-    <button onclick="switchTab('library')" id="nav-library" class="nav-btn flex flex-col items-center text-slate-500 hover:text-slate-300">
-      <span class="text-lg">📚</span>
-      <span class="text-[10px] font-medium mt-0.5">Library</span>
+    <button onclick="triggerHaptic(); switchTab('library')" id="nav-library" class="nav-btn flex flex-col items-center text-slate-500 hover:text-slate-300 transition">
+      <span class="text-base">📚</span>
+      <span class="text-[9px] font-medium mt-0.5">Library</span>
     </button>
-    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center text-slate-500 hover:text-slate-300">
-      <span class="text-lg">📊</span>
-      <span class="text-[10px] font-medium mt-0.5">Dashboard</span>
+    <button onclick="triggerHaptic(); switchTab('roadmap')" id="nav-roadmap" class="nav-btn flex flex-col items-center text-slate-500 hover:text-slate-300 transition">
+      <span class="text-base">🚀</span>
+      <span class="text-[9px] font-medium mt-0.5">Roadmap</span>
+    </button>
+    <button onclick="triggerHaptic(); switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center text-slate-500 hover:text-slate-300 transition">
+      <span class="text-base">📊</span>
+      <span class="text-[9px] font-medium mt-0.5">Dashboard</span>
     </button>
   </nav>
 
-  <!-- 4. Interactive Quick-Preview Modal -->
-  <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-3">
-    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-5 space-y-4 shadow-2xl animate-in fade-in zoom-in duration-200">
+  <!-- INTERACTIVE QUICK-PREVIEW MODAL -->
+  <div id="product-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-3 animate-in fade-in duration-150">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-5 space-y-4 shadow-2xl">
       <div class="flex justify-between items-start">
         <h3 id="modal-title" class="font-bold text-base text-white"></h3>
-        <button onclick="closeModal()" class="text-slate-400 hover:text-white text-lg px-2">✕</button>
+        <button onclick="triggerHaptic(); closeModal()" class="text-slate-400 hover:text-white text-lg px-2">✕</button>
       </div>
-      <p id="modal-price" class="text-amber-400 font-extrabold text-lg"></p>
+      <p id="modal-price" class="text-emerald-400 font-extrabold text-lg"></p>
       <p id="modal-desc" class="text-xs text-slate-300 leading-relaxed"></p>
       <div class="flex space-x-2 pt-2">
-        <button onclick="alert('Checkout initiated!')" class="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs transition">
+        <button onclick="triggerHaptic(); alert('Instant checkout initiated!')" class="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition shadow-lg shadow-amber-500/20">
           🚀 Instant Buy Now
         </button>
-        <!-- 5. One-Tap Affiliate Share Button inside Modal -->
-        <button onclick="shareProduct()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 px-4 py-2.5 rounded-xl text-xs font-bold transition">
+        <button onclick="triggerHaptic(); shareProduct()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 px-4 py-3 rounded-xl text-xs font-bold transition border border-slate-700">
           🔗 Share
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Core JavaScript Logic -->
+  <!-- CORE JAVASCRIPT LOGIC -->
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
     
+    // Haptic feedback helper
+    function triggerHaptic() {
+      if (tg.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('medium');
+      }
+    }
+
     let currentUserId = '123456';
     let currentUsername = 'Ambassador';
     if (tg.initDataUnsafe?.user) {
       currentUserId = tg.initDataUnsafe.user.id.toString();
       currentUsername = tg.initDataUnsafe.user.username || 'Ambassador';
       document.getElementById('username').innerText = `@${currentUsername}`;
-      document.getElementById('dash-referrals').innerText = '0'; // Real data binds via Supabase below
     }
 
     const SUPABASE_URL = 'https://ftheyucrrfblvgsceitd.supabase.co';
@@ -171,7 +230,6 @@
     let currentCategory = 'all';
 
     async function loadData() {
-      // Fetch products
       const { data, error } = await db.from('products').select('*');
       if (!error && data) {
         allProducts = data;
@@ -180,7 +238,6 @@
         document.getElementById('product-grid').innerHTML = '<p class="text-center text-slate-500 col-span-2 py-8 text-xs">Failed to load shelves.</p>';
       }
 
-      // Fetch user referral count for dashboard
       const { count } = await db.from('user_referrals').select('*', { count: 'exact', head: true }).eq('referrer_id', currentUserId);
       const totalRefs = count || 0;
       document.getElementById('dash-referrals').innerText = totalRefs;
@@ -196,21 +253,21 @@
         return;
       }
 
-      grid.innerHTML = products.map((p, idx) => `
-        <div onclick="openModal('${encodeURIComponent(p.title)}', '${p.price}', '${encodeURIComponent(p.description || '')}')" 
-             class="bg-slate-900 border border-slate-800 hover:border-amber-500/40 p-3 rounded-xl shadow-lg flex flex-col justify-between cursor-pointer transition group">
+      grid.innerHTML = products.map((p) => `
+        <div onclick="triggerHaptic(); openModal('${encodeURIComponent(p.title)}', '${p.price}', '${encodeURIComponent(p.description || '')}')" 
+             class="bg-slate-900/80 backdrop-blur-sm border border-slate-800 hover:border-amber-500/50 p-3.5 rounded-2xl shadow-xl flex flex-col justify-between cursor-pointer transition group">
           <div>
-            <div class="flex justify-between items-center mb-1">
-              <span class="text-[9px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded uppercase font-medium">Digital Asset</span>
-              <span class="text-[9px] text-emerald-400 font-bold">⚡ Verified</span>
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-bold">⚡ Instant</span>
+              <span class="text-[9px] text-amber-400 font-bold">🔥 Bestseller</span>
             </div>
-            <h3 class="font-semibold text-xs text-white group-hover:text-amber-400 transition line-clamp-1">${p.title}</h3>
-            <p class="text-amber-400 font-bold text-xs my-1">$${p.price}</p>
-            <p class="text-[10px] text-slate-400 mb-2 line-clamp-2">${p.description || 'No description provided.'}</p>
+            <h3 class="font-bold text-xs text-white group-hover:text-amber-400 transition line-clamp-1">${p.title}</h3>
+            <p class="text-emerald-400 font-extrabold text-xs my-1">$${p.price}</p>
+            <p class="text-[10px] text-slate-400 mb-3 line-clamp-2 leading-relaxed">${p.description || 'Verified digital asset.'}</p>
           </div>
-          <div class="flex justify-between items-center pt-2 border-t border-slate-800/50">
-            <span class="text-[9px] text-slate-500">🔥 12 sold</span>
-            <span class="text-[10px] text-amber-400 font-bold">View ➔</span>
+          <div class="flex justify-between items-center pt-2 border-t border-slate-800/60">
+            <span class="text-[9px] text-slate-500">100% Verified</span>
+            <span class="text-[10px] text-amber-400 font-bold group-hover:translate-x-0.5 transition">View ➔</span>
           </div>
         </div>
       `).join('');
@@ -225,9 +282,9 @@
     function setCategory(cat) {
       currentCategory = cat;
       document.querySelectorAll('.cat-btn').forEach(btn => {
-        btn.className = 'cat-btn bg-slate-900 border border-slate-800 text-slate-300 font-medium px-3 py-1.5 rounded-lg whitespace-nowrap transition';
+        btn.className = 'cat-btn bg-slate-900 border border-slate-800 text-slate-300 font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition';
       });
-      event.target.className = 'cat-btn bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-lg whitespace-nowrap transition';
+      event.target.className = 'cat-btn bg-amber-500 text-slate-950 font-bold px-3.5 py-1.5 rounded-xl whitespace-nowrap transition shadow-md shadow-amber-500/20';
       
       if(cat === 'all') {
         renderProducts(allProducts);
@@ -238,16 +295,13 @@
     }
 
     function switchTab(tab) {
-      document.getElementById('view-store').classList.add('hidden');
-      document.getElementById('view-library').classList.add('hidden');
-      document.getElementById('view-dashboard').classList.add('hidden');
-
-      document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.className = 'nav-btn flex flex-col items-center text-slate-500 hover:text-slate-300';
+      ['store', 'library', 'roadmap', 'dashboard'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        document.getElementById(`nav-${t}`).className = 'nav-btn flex flex-col items-center text-slate-500 hover:text-slate-300 transition';
       });
 
       document.getElementById(`view-${tab}`).classList.remove('hidden');
-      document.getElementById(`nav-${tab}`).className = 'nav-btn flex flex-col items-center text-amber-400';
+      document.getElementById(`nav-${tab}`).className = 'nav-btn flex flex-col items-center text-amber-400 transition';
     }
 
     function openModal(title, price, desc) {
@@ -264,12 +318,21 @@
     function copyRefLink() {
       const refLink = `https://t.me/Arovaq_bot?start=${currentUserId}`;
       navigator.clipboard.writeText(refLink);
-      alert('✅ Referral link copied to clipboard!');
+      showToast('✅ Personal referral link copied!');
     }
 
     function shareProduct() {
-      const shareUrl = `https://t.me/share/url?url=https://arovaq-landing.vercel.app&text=Check%20out%20this%20amazing%20Web3%20asset%20on%20Arovaq!`;
+      const shareUrl = `https://t.me/share/url?url=https://arovaq-landing.vercel.app&text=Check%20out%20this%20Web3%20asset%20on%20Arovaq!`;
       window.open(shareUrl, '_blank');
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'bg-slate-900 border border-amber-500/40 text-slate-100 text-xs font-semibold py-2.5 px-4 rounded-xl shadow-2xl animate-in fade-in slide-in-from-top duration-200';
+      toast.innerText = message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
     }
 
     loadData();
