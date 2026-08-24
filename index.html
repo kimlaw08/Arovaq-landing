@@ -30,13 +30,16 @@
 
     const SUPABASE_URL = 'https://ftheyucrrfblvgsceitd.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_-Ju2MMTnlLQHZ6PQAoxBmw_nL9aSJ3R';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // Correct CDN initialization
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     async function loadProducts() {
-      const { data, error } = await supabase.from('products').select('*').limit(10);
+      const { data, error } = await db.from('products').select('*').limit(10);
       const grid = document.getElementById('product-grid');
       
-      if (error || !data.length) {
+      if (error || !data || data.length === 0) {
         grid.innerHTML = '<p class="text-center text-slate-400">No products listed yet.</p>';
         return;
       }
