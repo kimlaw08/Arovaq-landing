@@ -62,26 +62,12 @@
       <section>
         <div class="flex justify-between items-center mb-2.5">
           <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300">Featured Curated Shelves</h2>
-          <span id="product-count" class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">1 item</span>
+          <span id="product-count" class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">0 items</span>
         </div>
         <div id="product-grid" class="grid grid-cols-2 gap-3">
-          <!-- Default Featured Product Item -->
-          <div onclick="triggerHaptic(); openModal('Future Express, the Intelligent and Decentralized Age - Coming Soon', '8', 'A visionary look into the decentralized future, AI integration, and Web3 automation.')" 
-               class="bg-slate-900 border border-slate-700 hover:border-amber-500/60 p-3.5 rounded-2xl shadow-xl flex flex-col justify-between cursor-pointer transition group">
-            <div>
-              <div class="flex justify-between items-center mb-1.5">
-                <span class="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-bold">⚡ Instant</span>
-                <span class="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-bold">🚀 Coming Soon</span>
-              </div>
-              <h3 class="font-bold text-xs text-white group-hover:text-amber-400 transition line-clamp-2">Future Express, the Intelligent and Decentralized Age</h3>
-              <p class="text-emerald-400 font-extrabold text-sm my-1.5">$8</p>
-              <p class="text-[11px] text-slate-200 mb-3 line-clamp-2 leading-relaxed">A visionary look into the decentralized future and intelligent automation.</p>
-            </div>
-            <div class="flex justify-between items-center pt-2 border-t border-slate-800">
-              <span class="text-[9px] text-slate-300 font-medium">100% Verified</span>
-              <span class="text-[10px] text-amber-400 font-bold group-hover:translate-x-0.5 transition">View ➔</span>
-            </div>
-          </div>
+          <!-- Skeleton Loading State -->
+          <div class="bg-slate-900 border border-slate-700 p-3.5 rounded-2xl animate-pulse h-48"></div>
+          <div class="bg-slate-900 border border-slate-700 p-3.5 rounded-2xl animate-pulse h-48"></div>
         </div>
       </section>
 
@@ -239,21 +225,16 @@
     const { createClient } = supabase;
     const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let allProducts = [
-      {
-        title: "Future Express, the Intelligent and Decentralized Age",
-        price: "8",
-        description: "A visionary look into the decentralized future, AI integration, and Web3 automation. Coming soon."
-      }
-    ];
+    let allProducts = [];
 
     async function loadData() {
       const { data, error } = await db.from('products').select('*');
-      if (!error && data && data.length > 0) {
-        // Prepend or merge user items with our flagship featured item
-        allProducts = [...allProducts, ...data];
+      if (!error && data) {
+        allProducts = data;
+        renderProducts(allProducts);
+      } else {
+        document.getElementById('product-grid').innerHTML = '<p class="text-center text-slate-300 col-span-2 py-8 text-xs">No products found.</p>';
       }
-      renderProducts(allProducts);
 
       const { count } = await db.from('user_referrals').select('*', { count: 'exact', head: true }).eq('referrer_id', currentUserId);
       const totalRefs = count || 0;
