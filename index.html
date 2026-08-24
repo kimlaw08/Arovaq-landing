@@ -1,68 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arovaq Market & Crypto Academy | Decentralized Gateway</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #0b0e14;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-        }
-        .card {
-            background: #161b22;
-            padding: 40px 30px;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            max-width: 400px;
-            width: 90%;
-            border: 1px solid #30363d;
-        }
-        h1 { font-size: 24px; margin-bottom: 10px; color: #58a6ff; }
-        p { color: #8b949e; font-size: 14px; margin-bottom: 30px; line-height: 1.5; }
-        .btn {
-            display: inline-block;
-            background-color: #238636;
-            color: white;
-            padding: 14px 28px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 16px;
-            transition: background 0.2s;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .btn:hover { background-color: #2ea043; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arovaq Marketplace</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4">
+  <header class="flex justify-between items-center mb-6">
+    <h1 class="text-xl font-bold text-amber-400">Arovaq Store</h1>
+    <span id="username" class="text-xs bg-slate-900 border border-slate-800 px-3 py-1 rounded-full text-slate-300">Loading...</span>
+  </header>
 
-    <div class="card">
-        <h1>Arovaq Marketplace</h1>
-        <p>Your decentralized gateway for digital assets, instant-split commerce, and Web3 education. Launch the secure Telegram app to start exploring.</p>
-        
-        <!-- The Dynamic Launch Button -->
-        <a id="launchBtn" href="https://t.me/Arovaq_bot" class="btn">🚀 Launch Arovaq Bot</a>
+  <main>
+    <div id="product-grid" class="grid grid-cols-1 gap-4">
+      <p class="text-center text-slate-500 py-8">Loading catalog shelves...</p>
     </div>
+  </main>
 
-    <script>
-        // Automatically extract ?ref=ID from the URL and append it to the Telegram bot link
-        const urlParams = new URLSearchParams(window.location.search);
-        const refId = urlParams.get('ref');
-        
-        if (refId) {
-            const launchBtn = document.getElementById('launchBtn');
-            launchBtn.href = `https://t.me/Arovaq_bot?start=${refId}`;
-        }
-    </script>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    
+    if (tg.initDataUnsafe?.user) {
+      document.getElementById('username').innerText = `@${tg.initDataUnsafe.user.username || 'Ambassador'}`;
+    }
 
+    const SUPABASE_URL = 'https://ftheyucrrfblvgsceitd.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_-Ju2MMTnlLQHZ6PQAoxBmw_nL9aSJ3R';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function loadProducts() {
+      const { data, error } = await supabase.from('products').select('*').limit(10);
+      const grid = document.getElementById('product-grid');
+      
+      if (error || !data.length) {
+        grid.innerHTML = '<p class="text-center text-slate-400">No products listed yet.</p>';
+        return;
+      }
+
+      grid.innerHTML = data.map(p => `
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-lg">
+          <h2 class="font-semibold text-lg text-white">${p.title}</h2>
+          <p class="text-amber-400 font-bold my-1">$${p.price}</p>
+          <p class="text-sm text-slate-400 mb-3">${p.description}</p>
+          <button onclick="alert('Processing checkout for ${p.title}')" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-2 rounded-lg transition">Buy Now</button>
+        </div>
+      `).join('');
+    }
+    loadProducts();
+  </script>
 </body>
 </html>
