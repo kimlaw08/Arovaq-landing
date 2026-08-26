@@ -1,338 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArovaQ Marketplace</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArovaQ — Verified Value. Instantly.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #071516;
+            --surface: #0E2A2B;
+            --surface-card: #13383A;
+            --gold: #D4AF37;
+            --gold-light: #F3E5AB;
+            --text-main: #F4F4F6;
+            --text-muted: #A1A1AA;
+            --border-color: rgba(212, 175, 55, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            padding-bottom: 90px;
+        }
+
+        /* Top Sticky Status Bar */
+        .status-bar {
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 16px;
+            font-size: 11px;
+            text-align: center;
+            color: var(--gold-light);
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        /* Header / Brand Logo Section */
+        .header {
+            padding: 20px 20px 12px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(14, 42, 43, 0.8) 0%, rgba(7, 21, 22, 0) 100%);
+        }
+
+        .brand-logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .brand-shield {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), #997A15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--bg-deep);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .brand-title {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+
+        .brand-tagline {
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Hero Section with Prioritized Listing Action */
+        .hero {
+            padding: 16px 20px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .hero h1 span {
+            color: var(--gold);
+        }
+
+        .hero p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .cta-btn-primary {
+            background: linear-gradient(135deg, var(--gold), #B89728);
+            color: var(--bg-deep);
+            border: none;
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .cta-btn-secondary {
+            background: var(--surface);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 10px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .cta-btn-primary:active, .cta-btn-secondary:active {
+            transform: scale(0.98);
+        }
+
+        /* Search & Categories */
+        .search-container {
+            padding: 0 20px;
+            margin-bottom: 14px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 12px;
+        }
+
+        .categories-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 0 20px 14px;
+            scrollbar-width: none;
+        }
+
+        .categories-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .pill {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            white-space: nowrap;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .pill.active {
+            background: var(--gold);
+            color: var(--bg-deep);
+            font-weight: 600;
+            border-color: var(--gold);
+        }
+
+        /* Product Grid */
+        .section-title {
+            padding: 0 20px;
+            font-family: 'Fraunces', serif;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 0 20px 20px;
+        }
+
+        .product-card {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-thumb {
+            height: 100px;
+            background: var(--surface-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            position: relative;
+        }
+
+        .badge-verified {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: rgba(7, 21, 22, 0.85);
+            color: var(--gold);
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        .product-info {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+
+        .product-title {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 11px;
+        }
+
+        .buy-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Subtle Floating FAQ Button */
+        .floating-faq {
+            position: fixed;
+            bottom: 75px;
+            right: 16px;
+            background: rgba(14, 42, 43, 0.9);
+            color: var(--text-muted);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 100;
+            border: 1px solid var(--border-color);
+        }
+
+        .floating-faq:hover {
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--surface);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 99;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 10px;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-item.active {
+            color: var(--gold);
+        }
+
+        .nav-icon {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 2px;
+        }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen pb-28 select-none font-sans">
+<body>
 
-  <!-- LIVE NOTIFICATION TOAST CONTAINER -->
-  <div id="toast-container" class="fixed top-3 left-3 right-3 z-50 pointer-events-none flex flex-col items-center space-y-2"></div>
-
-  <!-- SCREAMING INSTANT PAYOUT HERO BANNER -->
-  <div class="bg-gradient-to-r from-emerald-600 via-emerald-500 to-amber-500 text-slate-950 text-[11px] font-extrabold px-3 py-2 text-center shadow-lg flex items-center justify-center space-x-1.5 animate-pulse">
-    <span>⚡ 100% INSTANT PAYOUTS:</span>
-    <span class="font-medium">Earnings hit your Phantom, Solflare, or Binance UID instantly!</span>
-  </div>
-
-  <!-- BRAND HEADER -->
-  <header class="flex justify-between items-center px-4 pt-4 pb-3 border-b border-slate-800 bg-slate-950/90 backdrop-blur-md sticky top-0 z-30">
-    <div class="flex items-center space-x-2.5">
-      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-slate-950 font-black text-lg shadow-lg shadow-amber-500/20">
-        A
-      </div>
-      <div>
-        <h1 class="text-base font-extrabold text-amber-400 tracking-tight leading-tight">ArovaQ Store</h1>
-        <p class="text-[10px] text-emerald-400 font-semibold tracking-wider uppercase">Instant Web3 Rails</p>
-      </div>
-    </div>
-    <!-- Ambassador Status Pill -->
-    <div class="flex items-center space-x-1.5 bg-slate-900 border border-slate-700 px-3 py-1 rounded-full shadow-inner">
-      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-      <span id="username" class="text-xs font-bold text-white">Loading...</span>
-    </div>
-  </header>
-
-  <!-- MAIN APP VIEWS -->
-  <main class="p-4 space-y-6">
-
-    <!-- VIEW 1: STOREFRONT -->
-    <div id="view-store" class="space-y-4">
-      
-      <!-- Instant Search Bar -->
-      <div class="relative">
-        <input type="text" id="search-input" oninput="filterProducts()" placeholder="🔍 Search eBooks, masterclasses, templates..." 
-          class="w-full bg-slate-900 border border-slate-700 text-white placeholder-slate-400 text-xs rounded-xl px-4 py-3 focus:outline-none focus:border-amber-500 transition shadow-inner">
-      </div>
-
-      <!-- Sticky Category Pills -->
-      <div class="flex space-x-2 overflow-x-auto pb-1 scrollbar-none text-xs">
-        <button onclick="setCategory('all')" class="cat-btn bg-amber-500 text-slate-950 font-bold px-3.5 py-1.5 rounded-xl whitespace-nowrap transition shadow-md shadow-amber-500/20">🔥 All Assets</button>
-        <button onclick="setCategory('web3')" class="cat-btn bg-slate-900 border border-slate-700 text-slate-200 font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">🌐 Web3 & DeFi</button>
-        <button onclick="setCategory('ebook')" class="cat-btn bg-slate-900 border border-slate-700 text-slate-200 font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">📚 eBooks</button>
-        <button onclick="setCategory('masterclass')" class="cat-btn bg-slate-900 border border-slate-700 text-slate-200 font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">🎓 Masterclasses</button>
-        <button onclick="setCategory('template')" class="cat-btn bg-slate-900 border border-slate-700 text-slate-200 font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition">🛠️ Templates</button>
-      </div>
-
-      <!-- Dual-Column Product Grid -->
-      <section>
-        <div class="flex justify-between items-center mb-2.5">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300">Featured Curated Shelves</h2>
-          <span id="product-count" class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">0 items</span>
-        </div>
-        <div id="product-grid" class="grid grid-cols-2 gap-3">
-          <!-- Skeleton Loading State -->
-          <div class="bg-slate-900 border border-slate-700 p-3.5 rounded-2xl animate-pulse h-48"></div>
-          <div class="bg-slate-900 border border-slate-700 p-3.5 rounded-2xl animate-pulse h-48"></div>
-        </div>
-      </section>
-
-      <!-- Knowledge Base & Q&A Section -->
-      <section class="border-t border-slate-800 pt-6 mt-8">
-        <h2 class="text-sm font-bold text-amber-400 mb-3 flex items-center space-x-1.5">
-          <span>💡</span><span>Creator & Buyer Guide</span>
-        </h2>
-        <div class="space-y-2.5">
-          <div class="bg-slate-900 border border-slate-700 p-3.5 rounded-xl shadow-md">
-            <h3 class="font-semibold text-xs text-white mb-1">🔗 How do I connect my wallet?</h3>
-            <p class="text-[11px] text-slate-200 leading-relaxed">Use a self-custody wallet (Phantom/Solflare) or a CEX destination (Binance UID / email). Send <code class="text-amber-400 bg-slate-950 px-1.5 py-0.5 rounded font-bold">/wallet</code> in the bot.</p>
-          </div>
-          <div class="bg-slate-900 border border-slate-700 p-3.5 rounded-xl shadow-md">
-            <h3 class="font-semibold text-xs text-white mb-1">💰 How do instant payouts work?</h3>
-            <p class="text-[11px] text-slate-200 leading-relaxed">No delays or processing queues. Track commissions live via <code class="text-amber-400 bg-slate-950 px-1.5 py-0.5 rounded font-bold">/earnings</code> and receive funds instantly.</p>
-          </div>
-          <div class="bg-slate-900 border border-slate-700 p-3.5 rounded-xl shadow-md">
-            <h3 class="font-semibold text-xs text-white mb-1">👑 Why & how to join VIP?</h3>
-            <p class="text-[11px] text-slate-200 leading-relaxed">VIP unlocks advanced masterclasses, higher commission multipliers, and exclusive community perks.</p>
-          </div>
-        </div>
-      </section>
+    <!-- Sticky Live Status Bar -->
+    <div class="status-bar">
+        ⚡ Secure M-Pesa & Card Checkout Active  •  Pre-Launch Early Access
     </div>
 
-    <!-- VIEW 2: LIBRARY -->
-    <div id="view-library" class="hidden space-y-4 animate-in fade-in duration-200">
-      <h2 class="text-sm font-bold text-amber-400">📦 Your Digital Library</h2>
-      <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl text-center space-y-3 shadow-md">
-        <span class="text-3xl">📂</span>
-        <p class="text-xs text-white font-semibold">No purchases or downloads recorded yet.</p>
-        <p class="text-[11px] text-slate-300">Masterclasses and eBooks you buy or unlock will appear here instantly with one-click access.</p>
-      </div>
+    <!-- Header / Brand Section -->
+    <div class="header">
+        <div class="brand-logo-container">
+            <div class="brand-shield">A</div>
+            <div class="brand-title">ArovaQ</div>
+            <div class="brand-tagline">Verified Digital Marketplace</div>
+        </div>
     </div>
 
-    <!-- VIEW 3: ROADMAP & COMING SOON VAULT -->
-    <div id="view-roadmap" class="hidden space-y-4 animate-in fade-in duration-200">
-      <div>
-        <h2 class="text-sm font-bold text-amber-400">🚀 Innovation Roadmap & Coming Soon</h2>
-        <p class="text-[11px] text-slate-300 mt-0.5">The next-generation features currently under development for ArovaQ.</p>
-      </div>
-      <div class="space-y-3">
-        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl space-y-1.5 shadow-md">
-          <div class="flex justify-between items-center">
-            <h3 class="font-bold text-xs text-white">1. Solana Smart Contract Escrow</h3>
-            <span class="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-bold">In Testing</span>
-          </div>
-          <p class="text-[11px] text-slate-200">Fully decentralized, automated on-chain commission splits and trustless escrow execution on Solana.</p>
+    <!-- Hero Section with Prioritized Listing Button -->
+    <div class="hero">
+        <h1>List & Monetize <span>Instantly</span></h1>
+        <p>Publish your digital assets in seconds with KES or USD pricing.</p>
+        
+        <div class="cta-group">
+            <button class="cta-btn-primary" onclick="openListingWizard()">📦 List Your Product Now</button>
+            <button class="cta-btn-secondary" onclick="scrollToMarketplace()">Explore Curated Drops</button>
         </div>
-        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl space-y-1.5 shadow-md">
-          <div class="flex justify-between items-center">
-            <h3 class="font-bold text-xs text-white">2. Direct Mobile Money On/Off-Ramp</h3>
-            <span class="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-bold">Coming Soon</span>
-          </div>
-          <p class="text-[11px] text-slate-200">One-tap fiat gateway integration supporting peer-to-peer mobile payments seamlessly.</p>
-        </div>
-        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl space-y-1.5 shadow-md">
-          <div class="flex justify-between items-center">
-            <h3 class="font-bold text-xs text-white">3. In-App Digital Reader & Audio Player</h3>
-            <span class="text-[9px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full font-bold border border-slate-700">Planned</span>
-          </div>
-          <p class="text-[11px] text-slate-200">Read eBooks and listen to masterclass audio streams directly inside the Telegram Mini App.</p>
-        </div>
-        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl space-y-1.5 shadow-md">
-          <div class="flex justify-between items-center">
-            <h3 class="font-bold text-xs text-white">4. Creator Studio Suite & Analytics</h3>
-            <span class="text-[9px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full font-bold border border-slate-700">Planned</span>
-          </div>
-          <p class="text-[11px] text-slate-200">Advanced real-time sales metrics, traffic heatmaps, and promoter leaderboards for creators.</p>
-        </div>
-      </div>
     </div>
 
-    <!-- VIEW 4: DASHBOARD -->
-    <div id="view-dashboard" class="hidden space-y-4 animate-in fade-in duration-200">
-      <h2 class="text-sm font-bold text-amber-400">📊 Ambassador Dashboard</h2>
-      <div class="grid grid-cols-2 gap-3">
-        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl shadow-inner">
-          <p class="text-[10px] text-slate-300 uppercase tracking-wider font-medium">Total Referrals</p>
-          <p id="dash-referrals" class="text-xl font-extrabold text-white mt-1">0</p>
-        </div>
-        <div class="bg-slate-900 border border-slate-700 p-4 rounded-2xl shadow-inner">
-          <p class="text-[10px] text-slate-300 uppercase tracking-wider font-medium">Instant Earnings</p>
-          <p id="dash-earnings" class="text-xl font-extrabold text-emerald-400 mt-1">$0.00</p>
-        </div>
-      </div>
-      <button onclick="triggerHaptic(); copyRefLink();" class="w-full bg-slate-900 hover:bg-slate-800 border border-amber-500/40 text-amber-400 text-xs font-bold py-3 rounded-xl transition shadow-lg shadow-amber-500/10">
-        🔗 Copy Personal Referral Link
-      </button>
+    <!-- Search & Categories -->
+    <div class="search-container" id="marketplace-section">
+        <input type="text" class="search-input" placeholder="Search assets, templates, ebooks...">
     </div>
 
-  </main>
-
-  <!-- BOTTOM NAVIGATION BAR -->
-  <nav class="fixed bottom-0 left-0 right-0 bg-slate-950/95 backdrop-blur-md border-t border-slate-800 py-2.5 px-4 flex justify-around items-center z-40">
-    <button onclick="triggerHaptic(); switchTab('store')" id="nav-store" class="nav-btn flex flex-col items-center text-amber-400 transition">
-      <span class="text-base">🛒</span>
-      <span class="text-[9px] font-bold mt-0.5">Store</span>
-    </button>
-    <button onclick="triggerHaptic(); switchTab('library')" id="nav-library" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white transition">
-      <span class="text-base">📚</span>
-      <span class="text-[9px] font-medium mt-0.5">Library</span>
-    </button>
-    <button onclick="triggerHaptic(); switchTab('roadmap')" id="nav-roadmap" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white transition">
-      <span class="text-base">🚀</span>
-      <span class="text-[9px] font-medium mt-0.5">Roadmap</span>
-    </button>
-    <button onclick="triggerHaptic(); switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white transition">
-      <span class="text-base">📊</span>
-      <span class="text-[9px] font-medium mt-0.5">Dashboard</span>
-    </button>
-  </nav>
-
-  <!-- INTERACTIVE QUICK-PREVIEW MODAL -->
-  <div id="product-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-end sm:items-center justify-center p-3 animate-in fade-in duration-150">
-    <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-5 space-y-4 shadow-2xl">
-      <div class="flex justify-between items-start">
-        <h3 id="modal-title" class="font-bold text-base text-white"></h3>
-        <button onclick="triggerHaptic(); closeModal()" class="text-slate-300 hover:text-white text-lg px-2">✕</button>
-      </div>
-      <p id="modal-price" class="text-emerald-400 font-extrabold text-lg"></p>
-      <p id="modal-desc" class="text-xs text-slate-200 leading-relaxed"></p>
-      <div class="flex space-x-2 pt-2">
-        <button onclick="triggerHaptic(); alert('Instant checkout initiated!')" class="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 rounded-xl text-xs transition shadow-lg shadow-amber-500/20">
-          🚀 Instant Buy Now
-        </button>
-        <button onclick="triggerHaptic(); shareProduct()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 px-4 py-3 rounded-xl text-xs font-bold transition border border-slate-700">
-          🔗 Share
-        </button>
-      </div>
+    <div class="categories-scroll">
+        <div class="pill active">All Assets</div>
+        <div class="pill" onclick="filterCategory('Business & Marketing')">Business & Marketing</div>
+        <div class="pill" onclick="filterCategory('Ebooks')">Ebooks</div>
+        <div class="pill" onclick="filterCategory('Templates')">Templates</div>
+        <div class="pill" onclick="filterCategory('Masterclasses')">Masterclasses</div>
     </div>
-  </div>
 
-  <!-- CORE JAVASCRIPT LOGIC -->
-  <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    
-    function triggerHaptic() {
-      if (tg.HapticFeedback) {
-        tg.HapticFeedback.impactOccurred('medium');
-      }
-    }
+    <!-- Product Discovery Grid -->
+    <div class="section-title">
+        <span>Featured Drops</span>
+    </div>
 
-    let currentUserId = '123456';
-    let currentUsername = 'Ambassador';
-    if (tg.initDataUnsafe?.user) {
-      currentUserId = tg.initDataUnsafe.user.id.toString();
-      currentUsername = tg.initDataUnsafe.user.username || 'Ambassador';
-      document.getElementById('username').innerText = `@${currentUsername}`;
-    }
-
-    const SUPABASE_URL = 'https://ftheyucrrfblvgsceitd.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_-Ju2MMTnlLQHZ6PQAoxBmw_nL9aSJ3R';
-    const { createClient } = supabase;
-    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    let allProducts = [];
-
-    async function loadData() {
-      const { data, error } = await db.from('products').select('*');
-      if (!error && data) {
-        allProducts = data;
-        renderProducts(allProducts);
-      } else {
-        document.getElementById('product-grid').innerHTML = '<p class="text-center text-slate-300 col-span-2 py-8 text-xs">No products found.</p>';
-      }
-
-      const { count } = await db.from('user_referrals').select('*', { count: 'exact', head: true }).eq('referrer_id', currentUserId);
-      const totalRefs = count || 0;
-      document.getElementById('dash-referrals').innerText = totalRefs;
-      document.getElementById('dash-earnings').innerText = `$${totalRefs * 5}.00`;
-    }
-
-    function renderProducts(products) {
-      const grid = document.getElementById('product-grid');
-      document.getElementById('product-count').innerText = `${products.length} items`;
-
-      if (products.length === 0) {
-        grid.innerHTML = '<p class="text-center text-slate-300 col-span-2 py-8 text-xs">No products found.</p>';
-        return;
-      }
-
-      grid.innerHTML = products.map((p) => `
-        <div onclick="triggerHaptic(); openModal('${encodeURIComponent(p.title)}', '${p.price}', '${encodeURIComponent(p.description || '')}')" 
-             class="bg-slate-900 border border-slate-700 hover:border-amber-500/60 p-3.5 rounded-2xl shadow-xl flex flex-col justify-between cursor-pointer transition group">
-          <div>
-            <div class="flex justify-between items-center mb-1.5">
-              <span class="text-[9px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-bold">⚡ Instant</span>
-              <span class="text-[9px] bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-bold">🔥 Featured</span>
+    <div class="product-grid">
+        <div class="product-card">
+            <div class="product-thumb">
+                <span class="badge-verified">100% Verified</span>
+                📚
             </div>
-            <h3 class="font-bold text-xs text-white group-hover:text-amber-400 transition line-clamp-2">${p.title}</h3>
-            <p class="text-emerald-400 font-extrabold text-sm my-1.5">$${p.price}</p>
-            <p class="text-[11px] text-slate-200 mb-3 line-clamp-2 leading-relaxed">${p.description || 'Verified digital asset.'}</p>
-          </div>
-          <div class="flex justify-between items-center pt-2 border-t border-slate-800">
-            <span class="text-[9px] text-slate-300 font-medium">100% Verified</span>
-            <span class="text-[10px] text-amber-400 font-bold group-hover:translate-x-0.5 transition">View ➔</span>
-          </div>
+            <div class="product-info">
+                <div class="product-title">Future Express: The Decentralized Age</div>
+                <div class="product-footer">
+                    <span class="product-price">$8 / KES 1,040</span>
+                    <button class="buy-btn" onclick="selectCurrencyAndBuy('Future Express', 8, 1040)">Buy Now</button>
+                </div>
+            </div>
         </div>
-      `).join('');
-    }
 
-    function filterProducts() {
-      const query = document.getElementById('search-input').value.toLowerCase();
-      const filtered = allProducts.filter(p => p.title.toLowerCase().includes(query) || (p.description && p.description.toLowerCase().includes(query)));
-      renderProducts(filtered);
-    }
+        <div class="product-card">
+            <div class="product-thumb">
+                <span class="badge-verified">100% Verified</span>
+                🚀
+            </div>
+            <div class="product-info">
+                <div class="product-title">Creator Economy Blueprint 2026</div>
+                <div class="product-footer">
+                    <span class="product-price">$15 / KES 1,950</span>
+                    <button class="buy-btn" onclick="selectCurrencyAndBuy('Creator Economy Blueprint', 15, 1950)">Buy Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    function setCategory(cat) {
-      document.querySelectorAll('.cat-btn').forEach(btn => {
-        btn.className = 'cat-btn bg-slate-900 border border-slate-700 text-slate-200 font-medium px-3.5 py-1.5 rounded-xl whitespace-nowrap transition';
-      });
-      event.target.className = 'cat-btn bg-amber-500 text-slate-950 font-bold px-3.5 py-1.5 rounded-xl whitespace-nowrap transition shadow-md shadow-amber-500/20';
-      
-      if(cat === 'all') {
-        renderProducts(allProducts);
-      } else {
-        const filtered = allProducts.filter(p => p.title.toLowerCase().includes(cat) || (p.description && p.description.toLowerCase().includes(cat)));
-        renderProducts(filtered);
-      }
-    }
+    <!-- Subtle Floating FAQ Button -->
+    <button class="floating-faq" onclick="openFAQ()" title="FAQ">?</button>
 
-    function switchTab(tab) {
-      ['store', 'library', 'roadmap', 'dashboard'].forEach(t => {
-        document.getElementById(`view-${t}`).classList.add('hidden');
-        document.getElementById(`nav-${t}`).className = 'nav-btn flex flex-col items-center text-slate-400 hover:text-white transition';
-      });
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('Store')">
+            <span class="nav-icon">🛍️</span>
+            Store
+        </button>
+        <button class="nav-item" onclick="switchTab('Library')">
+            <span class="nav-icon">📦</span>
+            Library
+        </button>
+        <button class="nav-item" onclick="switchTab('Profile')">
+            <span class="nav-icon">👤</span>
+            Profile
+        </button>
+    </div>
 
-      document.getElementById(`view-${tab}`).classList.remove('hidden');
-      document.getElementById(`nav-${tab}`).className = 'nav-btn flex flex-col items-center text-amber-400 transition';
-    }
+    <script>
+        // Interactive Product Listing Flow with KES / USD support
+        function openListingWizard() {
+            const title = prompt("📦 Product Listing Wizard (1/3)\n\nEnter your product title (e.g., Masterclass Guide, Web3 Template):");
+            if (!title) return;
 
-    function openModal(title, price, desc) {
-      document.getElementById('modal-title').innerText = decodeURIComponent(title);
-      document.getElementById('modal-price').innerText = `$${price}`;
-      document.getElementById('modal-desc').innerText = decodeURIComponent(desc);
-      document.getElementById('product-modal').classList.remove('hidden');
-    }
+            const description = prompt("📦 Product Listing Wizard (2/3)\n\nEnter a short description for your asset:");
+            if (!description) return;
 
-    function closeModal() {
-      document.getElementById('product-modal').classList.add('hidden');
-    }
+            const currencyChoice = prompt("📦 Product Listing Wizard (3/3)\n\nChoose your currency:\nType '1' for US Dollars (USD)\nType '2' for Kenya Shillings (KES)", "1");
+            
+            if (currencyChoice === "1") {
+                const usdPrice = prompt("Enter price in USD ($):", "10");
+                if (usdPrice) {
+                    alert(`✅ Coming Soon / Pre-Launch Ready!\n\nTitle: ${title}\nDescription: ${description}\nPrice: $${usdPrice}\n\nYour listing is formatted and ready for platform integration.`);
+                }
+            } else if (currencyChoice === "2") {
+                const kesPrice = prompt("Enter price in Kenya Shillings (KES):", "1300");
+                if (kesPrice) {
+                    alert(`✅ Coming Soon / Pre-Launch Ready!\n\nTitle: ${title}\nDescription: ${description}\nPrice: KES ${kesPrice}\n\nYour listing is formatted and ready for platform integration.`);
+                }
+            } else if (currencyChoice !== null) {
+                alert("Invalid currency choice. Please try listing again.");
+            }
+        }
 
-    function copyRefLink() {
-      const refLink = `https://t.me/Arovaq_bot?start=${currentUserId}`;
-      navigator.clipboard.writeText(refLink);
-      showToast('✅ Personal referral link copied!');
-    }
+        function scrollToMarketplace() {
+            document.getElementById('marketplace-section').scrollIntoView({ behavior: 'smooth' });
+        }
 
-    function shareProduct() {
-      const shareUrl = `https://t.me/share/url?url=https://arovaq-landing.vercel.app&text=Check%20out%20this%20Web3%20asset%20on%20ArovaQ!`;
-      window.open(shareUrl, '_blank');
-    }
+        function selectCurrencyAndBuy(productName, usdPrice, kesPrice) {
+            const currency = prompt(`Select your preferred checkout currency for "${productName}":\nType '1' for USD ($${usdPrice})\nType '2' for KES (KES ${kesPrice})`, "1");
+            
+            if (currency === "1") {
+                alert(`🚀 Coming Soon!\n\nYou selected USD ($${usdPrice}) for ${productName}. Secure M-Pesa and card payment routing will go live at public launch.`);
+            } else if (currency === "2") {
+                alert(`🚀 Coming Soon!\n\nYou selected Kenya Shillings (KES ${kesPrice}) for ${productName}. M-Pesa express integration will unlock at official launch.`);
+            }
+        }
 
-    function showToast(message) {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      toast.className = 'bg-slate-900 border border-amber-500/50 text-white text-xs font-semibold py-2.5 px-4 rounded-xl shadow-2xl animate-in fade-in slide-in-from-top duration-200';
-      toast.innerText = message;
-      container.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
+        function filterCategory(categoryName) {
+            alert(`📂 Coming Soon!\n\nCategory filtering for "${categoryName}" will activate with our complete catalog drop.`);
+        }
 
-    loadData();
-  </script>
+        function openFAQ() {
+            alert("💡 ArovaQ FAQ:\n\n• How to List? Tap 'List Your Product Now' to set your title, description, and currency (KES or USD).\n• How do buyers pay? Securely via M-Pesa (KES) or USD.\n• Do I need a crypto wallet? No, fiat and mobile money routing are fully supported.");
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            if (tabName === 'Library') {
+                alert("📦 Library: Your purchased assets will appear here once the marketplace officially opens.");
+            } else if (tabName === 'Profile') {
+                alert("👤 Profile & VIP: Manage your account, creator settings, and affiliate earnings here.");
+            }
+        }
+    </script>
 </body>
 </html>
