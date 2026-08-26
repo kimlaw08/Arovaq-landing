@@ -1,0 +1,79 @@
+/* =========================================================
+   AROVAQ — Premium Logo Shine
+   Light Bluish/Cyan + Deep Teal + Gold
+   ========================================================= */
+
+.arovaq-logo {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.arovaq-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Premium light sweep */
+.arovaq-logo::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  left: -80%;
+  width: 35%;
+  height: 180%;
+
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(57, 217, 209, 0.55) 45%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(221, 170, 42, 0.35) 58%,
+    transparent 75%
+  );
+
+  transform: rotate(18deg);
+  pointer-events: none;
+
+  animation: arovaqShine 5s ease-in-out infinite;
+}
+
+@keyframes arovaqShine {
+  0% {
+    left: -80%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  45% {
+    left: 140%;
+    opacity: 1;
+  }
+  55% {
+    left: 140%;
+    opacity: 0;
+  }
+  100% {
+    left: 140%;
+    opacity: 0;
+  }
+}
+
+/* AROVAQ brand gradient */
+.arovaq-brand {
+  background: linear-gradient(
+    90deg,
+    #075E5C,
+    #16BFC0,
+    #39D9D1,
+    #DDAA2A,
+    #F4C542
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
