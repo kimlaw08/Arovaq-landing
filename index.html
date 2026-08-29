@@ -3,215 +3,787 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AROVAQ — Verified Value Marketplace</title>
+    <title>AROVAQ — VERIFIED VALUE.</title>
+    <!-- Official Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* =========================================================
-           AROVAQ — Global Base & Theme Styles
-           ========================================================= */
+        :root {
+            --bg-deep: #071516;
+            --surface: #0E2A2B;
+            --surface-card: #13383A;
+            --cyan-highlight: #39D9D1;
+            --teal-deep: #075E5C;
+            --gold: #D4AF37;
+            --gold-light: #F3E5AB;
+            --text-main: #F4F4F6;
+            --text-muted: #A1A1AA;
+            --border-color: rgba(212, 175, 55, 0.2);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background-color: #0b1919;
-            color: #ffffff;
-            padding: 16px;
-            padding-bottom: 80px;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            padding-bottom: 95px;
         }
 
-        /* =========================================================
-           AROVAQ — Premium Logo Shine
-           Light Bluish/Cyan + Deep Teal + Gold
-           ========================================================= */
-        .arovaq-logo {
-          position: relative;
-          display: inline-block;
-          overflow: hidden;
-          border-radius: 12px;
-        }
-
-        .arovaq-logo img {
-          display: block;
-          width: 100%;
-          height: auto;
-        }
-
-        /* Premium light sweep */
-        .arovaq-logo::after {
-          content: "";
-          position: absolute;
-          top: -40%;
-          left: -80%;
-          width: 35%;
-          height: 180%;
-
-          background: linear-gradient(
-            105deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.05) 25%,
-            rgba(57, 217, 209, 0.55) 45%,
-            rgba(255, 255, 255, 0.85) 50%,
-            rgba(221, 170, 42, 0.35) 58%,
-            transparent 75%
-          );
-
-          transform: rotate(18deg);
-          pointer-events: none;
-          animation: arovaqShine 5s ease-in-out infinite;
-        }
-
-        @keyframes arovaqShine {
-          0% { left: -80%; opacity: 0; }
-          15% { opacity: 1; }
-          45% { left: 140%; opacity: 1; }
-          55% { left: 140%; opacity: 0; }
-          100% { left: 140%; opacity: 0; }
-        }
-
-        /* AROVAQ brand gradient */
-        .arovaq-brand {
-          background: linear-gradient(
-            90deg,
-            #075E5C,
-            #16BFC0,
-            #39D9D1,
-            #DDAA2A,
-            #F4C542
-          );
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          font-weight: 800;
-        }
-
-        /* =========================================================
-           Layout & Cards
-           ========================================================= */
-        header {
+        /* Status Bar with Non-Custodial & M-Pesa Notice */
+        .status-bar {
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 16px;
+            font-size: 11px;
             text-align: center;
-            margin-bottom: 24px;
+            color: var(--gold-light);
+            letter-spacing: 0.5px;
+            font-weight: 500;
         }
 
-        header h1 {
+        /* Milestone Urgency Banner */
+        .milestone-banner {
+            background: linear-gradient(135deg, rgba(7, 94, 92, 0.4), rgba(212, 175, 55, 0.2));
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 16px;
+            font-size: 11px;
+            text-align: center;
+            color: var(--cyan-highlight);
+            font-weight: 600;
+        }
+
+        .header {
+            padding: 20px 20px 12px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(14, 42, 43, 0.8) 0%, rgba(7, 21, 22, 0) 100%);
+        }
+
+        .brand-logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .arovaq-logo {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cyan-highlight), var(--teal-deep));
+            box-shadow: 0 4px 15px rgba(57, 217, 209, 0.3);
+        }
+
+        .arovaq-logo-inner {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fraunces', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--bg-deep);
+        }
+
+        .brand-title {
+            font-family: 'Fraunces', serif;
             font-size: 24px;
-            margin-top: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #075E5C, #16BFC0, #39D9D1, #DDAA2A, #F4C542);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-tagline {
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        .hero {
+            padding: 16px 20px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .hero h1 span {
+            color: var(--cyan-highlight);
+        }
+
+        .hero p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .cta-btn-primary {
+            background: linear-gradient(135deg, var(--cyan-highlight), var(--teal-deep));
+            color: var(--text-main);
+            border: none;
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 4px 12px rgba(57, 217, 209, 0.2);
+        }
+
+        .cta-btn-secondary {
+            background: var(--surface);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 10px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .search-container {
+            padding: 0 20px;
+            margin-bottom: 14px;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 12px;
+        }
+
+        .categories-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 0 20px 14px;
+            scrollbar-width: none;
+        }
+
+        .categories-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .pill {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            white-space: nowrap;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .pill.active {
+            background: var(--cyan-highlight);
+            color: var(--bg-deep);
+            font-weight: 600;
+            border-color: var(--cyan-highlight);
         }
 
         .section-title {
-            font-size: 18px;
-            margin-bottom: 12px;
+            padding: 0 20px;
+            font-family: 'Fraunces', serif;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 0 20px 20px;
+        }
+
+        .product-card {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-thumb {
+            height: 100px;
+            background: var(--surface-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            position: relative;
+        }
+
+        .badge-verified {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: rgba(7, 21, 22, 0.85);
+            color: var(--cyan-highlight);
+            font-size: 9px;
+            padding: 2px 5px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
             font-weight: 600;
         }
 
-        .drops-container {
+        .product-info {
+            padding: 10px;
             display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            padding-bottom: 12px;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
         }
 
-        .drop-card {
-            background-color: #112525;
-            border: 1px solid #1a3838;
-            border-radius: 12px;
-            padding: 16px;
-            min-width: 260px;
-            flex: 1;
+        .product-title {
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-main);
+            line-height: 1.3;
         }
 
-        .badge {
-            background-color: #DDAA2A;
-            color: #0b1919;
-            font-size: 10px;
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .product-price {
             font-weight: 700;
-            padding: 2px 8px;
+            color: var(--gold);
+            font-size: 11px;
+        }
+
+        .buy-btn {
+            background: transparent;
+            border: 1px solid var(--cyan-highlight);
+            color: var(--cyan-highlight);
+            padding: 3px 6px;
             border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
-
-        .drop-card h3 {
-            font-size: 15px;
-            margin-bottom: 8px;
-        }
-
-        .price {
-            color: #39D9D1;
-            font-weight: 700;
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-
-        .btn-buy {
-            background-color: #16BFC0;
-            color: #0b1919;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
+            font-size: 9px;
             font-weight: 600;
             cursor: pointer;
-            float: right;
         }
 
-        /* Bottom Nav */
+        .leaderboard-section {
+            margin: 0 20px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .lb-header {
+            font-family: 'Fraunces', serif;
+            font-size: 15px;
+            color: var(--gold-light);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .lb-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .lb-column {
+            background: var(--surface-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .lb-col-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--cyan-highlight);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 4px;
+        }
+
+        .lb-item {
+            font-size: 10px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .lb-item span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .content-page {
+            padding: 0 20px 24px;
+        }
+
+        .legal-card {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .legal-card h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 15px;
+            color: var(--gold-light);
+            margin-bottom: 8px;
+        }
+
+        .legal-card p, .legal-card ul {
+            font-size: 11px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .legal-card ul {
+            padding-left: 16px;
+        }
+
+        .legal-card li {
+            margin-bottom: 4px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 21, 22, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 340px;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-title {
+            font-family: 'Fraunces', serif;
+            font-size: 16px;
+            color: var(--gold-light);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--surface-card);
+            border: 1px solid var(--border-color);
+            padding: 8px 10px;
+            border-radius: 6px;
+            color: var(--text-main);
+            font-size: 12px;
+        }
+
+        .modal-btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .floating-faq {
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            background: rgba(14, 42, 43, 0.9);
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 100;
+            border: 1px solid var(--border-color);
+        }
+
+        .floating-faq:hover {
+            color: var(--cyan-highlight);
+            border-color: var(--cyan-highlight);
+        }
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
-            right: 0;
-            background-color: #0e1f1f;
+            width: 100%;
+            background: var(--surface);
+            border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: space-around;
-            padding: 12px;
-            border-top: 1px solid #1a3838;
+            padding: 10px 0;
+            z-index: 99;
         }
 
         .nav-item {
-            color: #8fa8a8;
             text-align: center;
-            font-size: 12px;
+            color: var(--text-muted);
+            font-size: 10px;
             text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
         }
 
         .nav-item.active {
-            color: #39D9D1;
+            color: var(--cyan-highlight);
+        }
+
+        .nav-icon {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 2px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="arovaq-logo">
-            <!-- Replace with your actual logo image path if needed -->
-            <div style="width: 60px; height: 60px; background: #16BFC0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #0b1919; font-size: 24px;">A</div>
-        </div>
-        <h1 class="arovaq-brand">AROVAQ</h1>
-        <p style="font-size: 12px; color: #8fa8a8;">VERIFIED VALUE MARKETPLACE</p>
-    </header>
+    <!-- Non-Custodial Compliance Notice -->
+    <div class="status-bar">
+        🔒 Non-Custodial Marketplace • M-Pesa Strictly for Buying • We Do Not Hold Funds
+    </div>
 
-    <div class="section-title">Featured Drops</div>
-    <div class="drops-container">
-        <div class="drop-card">
-            <span class="badge">100% Verified</span>
-            <h3>Future Express: The Decentralized Age</h3>
-            <div class="price">$8 / KES 1,040</div>
-            <button class="btn-buy">Buy Now</button>
-        </div>
-        <div class="drop-card">
-            <span class="badge">100% Verified</span>
-            <h3>Creator Economy Blueprint 2026</h3>
-            <div class="price">$15 / KES 1,950</div>
-            <button class="btn-buy">Buy Now</button>
+    <!-- 50k Affiliate Milestone Urgency Banner -->
+    <div class="milestone-banner">
+        🔥 Affiliate Milestone: 14,250 / 50,000 Joined (All % Tiers FREE Until 50k!)
+    </div>
+
+    <div class="header">
+        <div class="brand-logo-container">
+            <div class="arovaq-logo">
+                <div class="arovaq-logo-inner">A</div>
+            </div>
+            <div class="brand-title">AROVAQ</div>
+            <div class="brand-tagline">VERIFIED DIGITAL MARKETPLACE</div>
         </div>
     </div>
 
-    <nav class="bottom-nav">
-        <a href="#" class="nav-item active">🛍️ Store</a>
-        <a href="#" class="nav-item">📦 Library</a>
-    </nav>
+    <!-- ================= PAGE 1: STOREFRONT VIEW ================= -->
+    <div id="store-view" class="view-section active">
+        <div class="hero">
+            <h1>List & Monetize <span>Instantly</span></h1>
+            <p>Publish your digital assets in seconds with KES or USD pricing.</p>
+            
+            <div class="cta-group">
+                <button class="cta-btn-primary" onclick="openListingModal()">📦 List Your Product Now</button>
+                <button class="cta-btn-secondary" onclick="scrollToMarketplace()">Explore Curated Drops</button>
+            </div>
+        </div>
 
+        <div class="search-container" id="marketplace-section">
+            <input type="text" class="search-input" placeholder="Search business, ebooks, templates, masterclasses...">
+        </div>
+
+        <div class="categories-scroll">
+            <div class="pill active" onclick="filterCategory('All Assets', this)">All Assets</div>
+            <div class="pill" onclick="filterCategory('Business & Marketing', this)">Business & Marketing</div>
+            <div class="pill" onclick="filterCategory('Ebooks', this)">Ebooks</div>
+            <div class="pill" onclick="filterCategory('Templates', this)">Templates</div>
+            <div class="pill" onclick="filterCategory('Masterclasses', this)">Masterclasses</div>
+        </div>
+
+        <div class="section-title">
+            <span>Featured Drops</span>
+        </div>
+
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-thumb">
+                    <span class="badge-verified">100% Verified</span>
+                    📚
+                </div>
+                <div class="product-info">
+                    <div class="product-title">Future Express: The Decentralized Age</div>
+                    <div class="product-footer">
+                        <span class="product-price">$8 / KES 1,040</span>
+                        <button class="buy-btn" onclick="selectCurrencyAndBuy('Future Express', 8, 1040)">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-thumb">
+                    <span class="badge-verified">100% Verified</span>
+                    🚀
+                </div>
+                <div class="product-info">
+                    <div class="product-title">Creator Economy Blueprint 2026</div>
+                    <div class="product-footer">
+                        <span class="product-price">$15 / KES 1,950</span>
+                        <button class="buy-btn" onclick="selectCurrencyAndBuy('Creator Economy Blueprint', 15, 1950)">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="leaderboard-section">
+            <div class="lb-header">🏆 Pre-Launch Network Rankings</div>
+            <div class="lb-columns">
+                <div class="lb-column">
+                    <div class="lb-col-title">Affiliates</div>
+                    <div class="lb-item">1. @kim_l <span>$1,420</span></div>
+                    <div class="lb-item">2. @baze_ke <span>$980</span></div>
+                    <div class="lb-item">3. @startups <span>$650</span></div>
+                </div>
+                <div class="lb-column">
+                    <div class="lb-col-title">Creators</div>
+                    <div class="lb-item">1. @alpha_edu <span>$2,890</span></div>
+                    <div class="lb-item">2. @masterclass <span>$1,750</span></div>
+                    <div class="lb-item">3. @vector_fx <span>$1,120</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= LIBRARY VIEW ================= -->
+    <div id="library-view" class="view-section">
+        <div class="content-page">
+            <div class="section-title" style="margin-bottom: 16px;">My Digital Library</div>
+            <div class="legal-card">
+                <h3>Secured Access & Vault</h3>
+                <p>Purchased assets are bound securely to your Telegram ID or authenticated profile to prevent unauthorized commercial resale under platform terms[cite: 3].</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 2: COMPLIANCE, RULES & GUIDES VIEW ================= -->
+    <div id="guide-view" class="view-section">
+        <div class="content-page">
+            <div class="section-title" style="margin-bottom: 16px;">Governance & Platform Guide</div>
+
+            <div class="legal-card">
+                <h3>🎯 Mission & Vision</h3>
+                <p><strong>Mission:</strong> To build a non-custodial, peer-to-peer digital marketplace empowering creators and affiliates globally.</p>
+                <p><strong>Vision:</strong> A transparent ecosystem backed by strict non-custodial rules and verifiable value.</p>
+            </div>
+
+            <div class="legal-card">
+                <h3>🛡️ Non-Custodial Compliance (VASP Shield)</h3>
+                <p>Arovaq operates on a strict rule: <strong>We do not hold customer funds.</strong> M-Pesa is used strictly as an immediate buying/checkout gateway. Once funds clear, they route instantly. Users independently utilize external on-ramp and off-ramp services.</p>
+            </div>
+
+            <div class="legal-card">
+                <h3>📈 Affiliate Tiers & 50k Milestone Urgency</h3>
+                <p>• <strong>Free Access Window:</strong> All affiliate commission tiers (2%, 10%, 20%, 40%, 50%) are 100% free for everyone until we hit <strong>50,000 affiliates</strong>.</p>
+                <p>• <strong>Post-50k Lock:</strong> Once the 50k milestone is reached, the elite 40% and 50% tiers lock automatically. Access will require a paid VIP subscription (<strong>1,000 KES for 1 year</strong> or <strong>1,500 KES for 2 years</strong>).</p>
+            </div>
+
+            <div class="legal-card">
+                <h3>📜 General Rules, Regulations & T&Cs</h3>
+                <p>• <strong>Product Protection:</strong> Access is governed by strict account/ID binding policies, EULAs, and Terms of Service (ToS) prohibiting unauthorized credential sharing or resale[cite: 3].</p>
+                <p>• <strong>Conduct:</strong> Fraudulent listings or manipulation result in immediate termination.</p>
+            </div>
+
+            <div class="legal-card">
+                <h3>💡 How to Use, Wallets & Withdrawals</h3>
+                <p><strong>1. Buying:</strong> Use M-Pesa or card checkout. Instant split-pay routes funds directly.</p>
+                <p><strong>2. Wallets:</strong> Connect your personal Web3 wallet via your profile to manage your earnings independently.</p>
+                <p><strong>3. Withdrawals:</strong> Handled entirely through external on-ramp/off-ramp services since Arovaq never holds user balances.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PROFILE VIEW ================= -->
+    <div id="profile-view" class="view-section">
+        <div class="content-page">
+            <div class="section-title" style="margin-bottom: 16px;">Creator & Affiliate Profile</div>
+            <div class="legal-card">
+                <h3>Account Status</h3>
+                <p><strong>Telegram ID Binding:</strong> Active & Verified[cite: 3]</p>
+                <p><strong>Affiliate Status:</strong> Free Access Tier (Pre-Launch Milestone Active)</p>
+                <button class="cta-btn-secondary" style="margin-top: 12px;" onclick="alert('External Web3 wallet linking interface ready.')">Connect Web3 Wallet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= INTERACTIVE LISTING MODAL ================= -->
+    <div id="listing-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-title">📦 Product Listing Wizard</div>
+            <div class="form-group">
+                <label>Product Title</label>
+                <input type="text" id="list-title" class="form-control" placeholder="e.g. Masterclass Guide">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="list-category" class="form-control">
+                    <option>Business & Marketing</option>
+                    <option>Ebooks</option>
+                    <option>Templates</option>
+                    <option>Masterclasses</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Price & Currency</label>
+                <input type="text" id="list-price" class="form-control" placeholder="e.g. $10 or KES 1,300">
+            </div>
+            <div class="modal-btn-group">
+                <button class="cta-btn-primary" onclick="submitProductListing()">Publish Drop</button>
+                <button class="cta-btn-secondary" onclick="closeListingModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="floating-faq" onclick="openFAQModal()" title="Pre-Launch Guide">?</button>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('store-view', this)">
+            <span class="nav-icon">🛍️</span>
+            Store
+        </button>
+        <button class="nav-item" onclick="switchTab('library-view', this)">
+            <span class="nav-icon">📦</span>
+            Library
+        </button>
+        <button class="nav-item" onclick="switchTab('guide-view', this)">
+            <span class="nav-icon">📜</span>
+            Guide & T&C
+        </button>
+        <button class="nav-item" onclick="switchTab('profile-view', this)">
+            <span class="nav-icon">👤</span>
+            Profile
+        </button>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.Telegram && window.Telegram.WebApp) {
+                const tg = window.Telegram.WebApp;
+                tg.ready();
+                tg.expand();
+            }
+        });
+
+        function switchTab(viewId, element) {
+            document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById(viewId).classList.add('active');
+            if (element) element.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToMarketplace() {
+            document.getElementById('marketplace-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openListingModal() {
+            document.getElementById('listing-modal').style.display = 'flex';
+        }
+
+        function closeListingModal() {
+            document.getElementById('listing-modal').style.display = 'none';
+        }
+
+        function submitProductListing() {
+            const title = document.getElementById('list-title').value;
+            const price = document.getElementById('list-price').value;
+            if(!title || !price) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            alert(`✅ Success! "${title}" has been listed. 15-month reward window active under non-custodial terms.`);
+            closeListingModal();
+        }
+
+        function selectCurrencyAndBuy(productName, usdPrice, kesPrice) {
+            const choice = prompt(`Select M-Pesa/Card checkout for "${productName}":\n1. USD ($${usdPrice})\n2. KES (KES ${kesPrice})`, "1");
+            if(choice === "1") {
+                alert(`🚀 Secure Checkout (USD): Order for ${productName} routed through non-custodial gateway.`);
+            } else if(choice === "2") {
+                alert(`🚀 Secure Checkout (M-Pesa): M-Pesa express prompt dispatched for KES ${kesPrice}.`);
+            }
+        }
+
+        function filterCategory(categoryName, element) {
+            document.querySelectorAll('.categories-scroll .pill').forEach(p => p.classList.remove('active'));
+            if(element) element.classList.add('active');
+            alert(`📂 Filter applied: Showing results for "${categoryName}".`);
+        }
+
+        function openFAQModal() {
+            alert("💡 AROVAQ Pre-Launch Guide:\n\n• Non-Custodial: We do not hold funds; M-Pesa is strictly for buying.\n• Affiliate Milestone: All % tiers are FREE until 50k affiliates are reached!\n• Security: Protected by Account ID binding[cite: 3].");
+        }
+    </script>
 </body>
 </html>
